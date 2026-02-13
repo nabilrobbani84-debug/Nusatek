@@ -54,14 +54,22 @@ func main() {
 
 	// Repositories
 	propertyRepo := postgres.NewPropertyRepository(db)
+	customerRepo := postgres.NewCustomerRepository(db)
 	cacheRepo := redisRepo.NewPropertyCacheRepository(rdb)
 
 	// Usecase
 	propertyUsecase := usecase.NewPropertyUsecase(propertyRepo, cacheRepo, rabbitCh, timeoutContext)
+	customerUsecase := usecase.NewCustomerUsecase(customerRepo, timeoutContext)
 
 	// 6. Init Router & Handlers
 	r := gin.Default()
 	http.NewPropertyHandler(r, propertyUsecase)
+	http.NewCustomerHandler(r, customerUsecase)
+
+	// Serve Frontend
+	r.Static("/static", "./web")
+	r.StaticFile("/dashboard", "./web/index.html")
+	r.StaticFile("/", "./web/index.html")
 
 	// 5. Run Server
 	log.Println("Server running on port", cfg.AppPort)

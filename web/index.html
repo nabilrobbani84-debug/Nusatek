@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nusatek Property</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i data-lucide="building-2"></i>
+                <span>Nusatek Property</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active" onclick="switchView('dashboard', this)"><i data-lucide="home"></i> Dashboard</a>
+                <a href="#" onclick="switchView('dashboard', this)"><i data-lucide="list"></i> Listings</a>
+                <a href="#" onclick="switchView('customers', this)"><i data-lucide="users"></i> Customers</a>
+                <a href="#" onclick="switchView('settings', this)"><i data-lucide="settings"></i> Settings</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 class="page-title">Property Dashboard</h1>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="User">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Dashboard View -->
+                <div id="view-dashboard" class="view-section">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="card stat-card">
+                            <div class="icon-box info"><i data-lucide="building"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Properties</h3>
+                                <p id="total-properties">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="icon-box success"><i data-lucide="users"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Customers</h3>
+                                <p id="total-customers">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="icon-box warning"><i data-lucide="activity"></i></div>
+                            <div class="stat-info">
+                                <h3>Active Listings</h3>
+                                <p>85%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property List -->
+                    <div class="card property-list-card">
+                        <div class="card-header">
+                            <h2>Recent Properties</h2>
+                            <button class="btn-primary" onclick="showAddModal()"><i data-lucide="plus"></i> Add New</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="property-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Location</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="property-table-body">
+                                    <!-- Data will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customers View -->
+                <div id="view-customers" class="view-section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Customers</h2>
+                            <button class="btn-primary" onclick="showAddCustomerModal()"><i data-lucide="user-plus"></i> Add Customer</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="property-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customer-table-body">
+                                    <tr><td colspan="5">Loading customers...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="view-settings" class="view-section" style="display: none;">
+                     <div class="card">
+                        <div class="card-header">
+                            <h2>App Settings</h2>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <form id="settings-form" onsubmit="event.preventDefault(); alert('Settings saved locally!');">
+                                <div class="form-group">
+                                    <label>Application Name</label>
+                                    <input type="text" value="Nusatek Property" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Theme</label>
+                                    <select class="form-control">
+                                        <option>Dark Mode</option>
+                                        <option>Light Mode</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Adding Property -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAddModal()">&times;</span>
+            <h2>Add New Property</h2>
+            <form id="add-property-form">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price (IDR)</label>
+                    <input type="number" id="price" name="price" required>
+                </div>
+                 <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Property</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Customer -->
+    <div id="add-customer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAddCustomerModal()">&times;</span>
+            <h2>Add New Customer</h2>
+            <form id="add-customer-form">
+                <div class="form-group">
+                    <label for="c-name">Name</label>
+                    <input type="text" id="c-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="c-email">Email</label>
+                    <input type="email" id="c-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="c-phone">Phone</label>
+                    <input type="text" id="c-phone" name="phone">
+                </div>
+                <button type="submit" class="btn-primary">Save Customer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
